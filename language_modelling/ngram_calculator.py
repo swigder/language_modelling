@@ -11,8 +11,9 @@ class NgramCalculator:
                 sentence = padding + sentence
             if pad_right:
                 sentence = sentence + padding
-            for i in range(len(sentence)-n):
+            for i in range(len(sentence)-n+1):
                 ngram = sentence[i:i+n+1]
+                ngram = ngram[0] if n == 1 else tuple(ngram)
                 if ngram in ngrams:
                     ngrams[ngram] += 1
                 else:
@@ -21,7 +22,7 @@ class NgramCalculator:
 
     def get_unique_ngrams(self, n):
         unique_ngrams = []
-        for ngram, instances in self.calculate_ngrams(n):
+        for ngram, instances in self.calculate_ngrams(n).items():
             if instances == 1:
                 unique_ngrams.append(ngram)
         return unique_ngrams
