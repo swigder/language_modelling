@@ -19,7 +19,7 @@ class Corpus:
         return self.sentences
 
 
-class TestUnigramCalculator:
+class TestNgramCalculator:
     corpus = Corpus()
     ngram_calculator = NgramCalculator(corpus)
 
