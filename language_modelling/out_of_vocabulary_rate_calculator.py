@@ -19,4 +19,4 @@ class OutOfVocabularyRateCalculator:
             if token not in training_vocabulary:
                 out_of_vocabulary_words += 1
 
-        return out_of_vocabulary_words / len(test_tokens)
+        return (out_of_vocabulary_words / len(test_tokens)) * 100
