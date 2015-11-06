@@ -22,7 +22,7 @@ class NgramCalculator:
             if pad_right:
                 sentence = sentence + padding
             for i in range(len(sentence)-n+1):
-                ngram = sentence[i:i+n+1]
+                ngram = sentence[i:i+n]
                 ngram = ngram[0] if n == 1 else tuple(ngram)
                 if ngram in ngrams:
                     ngrams[ngram] += 1

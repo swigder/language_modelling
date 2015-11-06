@@ -3,6 +3,8 @@ from language_modelling.reuters_test_corpus import ReutersTestCorpus
 from language_modelling.unigram_calculator import UnigramCalculator
 from language_modelling.ngram_calculator import NgramCalculator
 from language_modelling.out_of_vocabulary_rate_calculator import OutOfVocabularyRateCalculator
+from language_modelling.perplexity import PerplexityCalculator
+from language_modelling.bigram_language_model import BigramLanguageModel
 
 
 def q2_calculate_unique_unigrams_in_reuters_training():
@@ -43,7 +45,20 @@ def q4_calculate_oov_rate_for_reuters_test_with_respect_to_training():
     print("Out of vocabulary rate: ", oov_rate)
 
 
+def q5_calculate_perplexity_of_reuters_corpus():
+    training = ReutersTrainingCorpus()
+    test = ReutersTestCorpus()
+    language_model = BigramLanguageModel(training)
+    perplexity_calculator = PerplexityCalculator()
+    training_perplexity = perplexity_calculator.calculate_corpus_perplexity(language_model, training)
+    test_perplexity = perplexity_calculator.calculate_corpus_perplexity(language_model, test)
+
+    print("Training perplexity: ", training_perplexity)
+    print("Test perplexity: ", test_perplexity)
+
+
 if __name__ == '__main__':
     q2_calculate_unique_unigrams_in_reuters_training()
     q3_calculate_unique_ngrams_in_reuters_training_for_n_2_3_4_5_6()
     q4_calculate_oov_rate_for_reuters_test_with_respect_to_training()
+    q5_calculate_perplexity_of_reuters_corpus()

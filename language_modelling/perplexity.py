@@ -15,6 +15,6 @@ class PerplexityCalculator:
 
     def calculate_corpus_perplexity(self, language_model, corpus):
         perplexity = 1
-        for sentence in corpus:
+        for sentence in corpus.get_sentences():
             perplexity *= self.calculate_sentence_perplexity(language_model, sentence)
         return perplexity
