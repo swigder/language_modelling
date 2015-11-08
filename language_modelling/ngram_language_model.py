@@ -4,9 +4,8 @@ from math import log
 from math import pow
 
 
-class UnigramLanguageModel(LanguageModel):
+class UnigramLanguageModel():
     def __init__(self, corpus):
-        super(LanguageModel, self).__init__()
         unigram_calculator = UnigramCalculator(corpus)
         self.unigrams, self.corpus_unigram_length = unigram_calculator.calculate_unigrams()
         self.corpus_sentence_length = len(corpus.get_sentences())
