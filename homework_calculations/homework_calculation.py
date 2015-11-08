@@ -1,5 +1,4 @@
-from language_modelling.reuters_training_corpus import ReutersTrainingCorpus
-from language_modelling.reuters_test_corpus import ReutersTestCorpus
+from language_modelling.corpus import ReutersTrainingCorpus, ReutersTestCorpus
 from language_modelling.unigram_calculator import UnigramCalculator
 from language_modelling.ngram_calculator import NgramCalculator
 from language_modelling.out_of_vocabulary_rate_calculator import OutOfVocabularyRateCalculator
@@ -41,7 +40,7 @@ def q4_calculate_oov_rate_for_reuters_test_with_respect_to_training():
     test = ReutersTestCorpus()
     oov_calculator = OutOfVocabularyRateCalculator()
 
-    oov_rate = oov_calculator.calculate_out_of_vocabulary_rate(training.get_sentences(), test.get_sentences())
+    oov_rate = oov_calculator.calculate_out_of_vocabulary_rate(training, test)
     print("Out of vocabulary rate: ", oov_rate)
 
 

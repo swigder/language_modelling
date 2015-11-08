@@ -1,4 +1,5 @@
 from language_modelling.out_of_vocabulary_rate_calculator import OutOfVocabularyRateCalculator
+from language_modelling.corpus import Corpus
 
 
 class TestOutOfVocabularyRateCalculator:
@@ -18,4 +19,5 @@ class TestOutOfVocabularyRateCalculator:
     calculator = OutOfVocabularyRateCalculator()
 
     def test_calculate_out_of_vocabulary_rate(self):
-        assert 19/30 == self.calculator.calculate_out_of_vocabulary_rate(self.training_corpus, self.test_corpus)
+        assert 19/30*100 == self.calculator.calculate_out_of_vocabulary_rate(Corpus(self.training_corpus),
+                                                                             Corpus(self.test_corpus))

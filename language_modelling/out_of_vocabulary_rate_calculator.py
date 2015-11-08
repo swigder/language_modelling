@@ -11,8 +11,8 @@ class OutOfVocabularyRateCalculator:
         :param test_corpus: test data, in format list of list of tokens
         :return: percentage of tokens in test corpus which do not appear in training corpus
         """
-        training_vocabulary = set([item for sublist in training_corpus for item in sublist])
-        test_tokens = [item for sublist in test_corpus for item in sublist]
+        training_vocabulary = set([item for sublist in training_corpus.get_sentences() for item in sublist])
+        test_tokens = [item for sublist in test_corpus.get_sentences() for item in sublist]
 
         out_of_vocabulary_words = 0
         for token in test_tokens:
