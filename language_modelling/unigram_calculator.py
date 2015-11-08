@@ -44,4 +44,4 @@ class UnigramCalculator:
         :return: proportion of tokens that appear only once; i.e., number of tokens that appear only once over total
         number of tokens.
         """
-        return len(self.get_unique_unigrams()) / len(self.unigrams) * 100
+        return len(self.get_unique_unigrams()) / len(self.unigrams)

@@ -19,5 +19,5 @@ class TestOutOfVocabularyRateCalculator:
     calculator = OutOfVocabularyRateCalculator()
 
     def test_calculate_out_of_vocabulary_rate(self):
-        assert 19/30*100 == self.calculator.calculate_out_of_vocabulary_rate(Corpus(self.training_corpus),
+        assert 19/30 == self.calculator.calculate_out_of_vocabulary_rate(Corpus(self.training_corpus),
                                                                              Corpus(self.test_corpus))

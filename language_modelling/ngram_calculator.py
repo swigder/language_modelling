@@ -50,4 +50,4 @@ class NgramCalculator:
         :return: proportion of unique ngrams that appear only once; i.e., number of ngrams that appear only once over
         total number of unique ngrams.
         """
-        return len(self.get_unique_ngrams(n)) / len(self.calculate_ngrams(n)) * 100
+        return len(self.get_unique_ngrams(n)) / len(self.calculate_ngrams(n))

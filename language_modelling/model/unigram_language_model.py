@@ -21,15 +21,14 @@ class UnigramLanguageModel:
         """
         Get the count of a unigram in the corpus
         :param unigram: unigram to find count for
-        :return: count in the corpus if the unigram is found,
-        1 if it is not found, TODO should be zero
-        number of sentences in the corpus if the sentence boundary marker, <s>, is provided
+        :return: count of the unigram in the corpus, or number of sentences in the corpus if the sentence boundary
+        marker, <s>, is provided
         """
         if unigram == '<s>':
             return self.corpus_sentence_length
         if unigram in self.unigrams:
             return self.unigrams[unigram]
-        return 1  # don't want to cause math error by returning 0; numerator will be zero anyway
+        return 0
 
     def get_sentence_log_probability(self, sentence):
         """
@@ -38,9 +37,12 @@ class UnigramLanguageModel:
         :return: log of the probability of the sentence (to be used to calculate entropy, perplexity)
         """
         probability = 0
+        words = 0
         for i in range(0, len(sentence)):
-            probability += log(self.get_unigram_count(sentence[i]) / self.corpus_unigram_length, self.BASE)
-        return probability
+            unigram_count = self.get_unigram_count(sentence[i])
+            probability += log(unigram_count / self.corpus_unigram_length, self.BASE) if unigram_count != 0 else 0
+            words += 1 if unigram_count != 0 else 0
+        return probability, words
 
     def get_sentence_probability(self, sentence):
         """
@@ -48,4 +50,5 @@ class UnigramLanguageModel:
         :param sentence: list of words
         :return: probability of the sentence
         """
-        return self.BASE ** self.get_sentence_log_probability(sentence)
+        sentence_probability, words = self.get_sentence_log_probability(sentence)
+        return self.BASE ** sentence_probability, words

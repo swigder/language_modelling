@@ -5,8 +5,9 @@ class PerplexityCalculator:
         entropy = 0
         words = 0
         for sentence in corpus.get_sentences():
-            words += len(sentence)
-            entropy += language_model.get_sentence_log_probability(sentence)
+            sentence_entropy, sentence_found_words = language_model.get_sentence_log_probability(sentence)
+            entropy += sentence_entropy
+            words += sentence_found_words
         entropy /= -words
         perplexity = 2 ** entropy
         return perplexity

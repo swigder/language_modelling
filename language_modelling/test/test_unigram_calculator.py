@@ -43,4 +43,4 @@ class TestUnigramCalculator:
         assert self.corpus.unigrams == self.unigram_calculator.unigrams
 
     def test_get_percentage_unique_unigrams(self):
-        assert 16/18*100 == self.unigram_calculator.get_percentage_unique_unigrams()
+        assert 16/18 == self.unigram_calculator.get_percentage_unique_unigrams()

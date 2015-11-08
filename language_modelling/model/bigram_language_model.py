@@ -32,15 +32,17 @@ class BigramLanguageModel(UnigramLanguageModel):
         :return: probability of the bigram for the language model
         """
         x, y = bigram
-        return self.get_bigram_count(bigram) / self.get_unigram_count(x)
+        x_count = self.get_unigram_count(x)
+        return self.get_bigram_count(bigram) / x_count if x_count != 0 else 0
 
     def get_bigram_log_probability(self, bigram):
         """
         Gets the log of the probability of a bigram; see get_bigram_probability for details
         :param bigram: bigram to get the probability for
-        :return: log base 2 of the probability of the bigram for the language model
+        :return: log base 2 of the probability of the bigram for the language model; None if bigram probability is 0
         """
-        return log(self.get_bigram_probability(bigram), 2)
+        bigram_probability = self.get_bigram_probability(bigram)
+        return log(bigram_probability, self.BASE) if bigram_probability != 0 else None
 
     def get_sentence_log_probability(self, sentence):
         """
@@ -48,8 +50,14 @@ class BigramLanguageModel(UnigramLanguageModel):
         :param sentence: list of words
         :return: log of the probability of the sentence (to be used to calculate entropy, perplexity)
         """
-        probability = self.get_bigram_log_probability(('<s>', sentence[0]))
+        probability = 0
+        found_words = 0
+        bigram_probability = self.get_bigram_log_probability(('<s>', sentence[0]))
+        probability += bigram_probability if bigram_probability is not None else 0
+        found_words += 1 if bigram_probability is not None else 0
         for i in range(1, len(sentence)):
             bigram = (sentence[i-1], sentence[i])
-            probability += self.get_bigram_log_probability(bigram)
-        return probability
+            bigram_probability = self.get_bigram_log_probability(bigram)
+            probability += bigram_probability if bigram_probability is not None else 0
+            found_words += 1 if bigram_probability is not None else 0
+        return probability, found_words

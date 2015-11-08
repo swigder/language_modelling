@@ -30,4 +30,4 @@ class TestNgramCalculator:
         assert dict(self.frequencies) == self.ngram_calculator.calculate_ngrams(1)
 
     def test_get_percentage_unique_unigrams(self):
-        assert round(27/len(list(self.frequencies))*100, 2) == round(self.ngram_calculator.get_percentage_unique_ngrams(1), 2)
+        assert round(27/len(list(self.frequencies)), 2) == round(self.ngram_calculator.get_percentage_unique_ngrams(1), 2)
