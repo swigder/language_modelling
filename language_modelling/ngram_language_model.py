@@ -20,7 +20,7 @@ class UnigramLanguageModel():
     def get_sentence_log_probability(self, sentence):
         probability = 0
         for i in range(0, len(sentence)):
-            probability += log(self.get_unigram_count(sentence[i]) / self.corpus_unigram_length)
+            probability += log(self.get_unigram_count(sentence[i]) / self.corpus_unigram_length, 2)
         return probability
 
     def get_sentence_probability(self, sentence):
