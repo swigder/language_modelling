@@ -9,6 +9,9 @@ class Corpus:
     """
 
     def __init__(self, unprocessed_sentences):
+        """
+        :param unprocessed_sentences: list of sentences, where each sentence is a list of words
+        """
         sentences = [[word.upper() for word in sentence if len(re.sub(r'\W+', '', word)) != 0]
                      for sentence in unprocessed_sentences]
         self.sentences = [sentence for sentence in sentences if len(sentence) != 0]
