@@ -3,7 +3,7 @@ from language_modelling.unigram_calculator import UnigramCalculator
 from language_modelling.ngram_calculator import NgramCalculator
 from language_modelling.out_of_vocabulary_rate_calculator import OutOfVocabularyRateCalculator
 from language_modelling.perplexity import PerplexityCalculator
-from language_modelling.ngram_language_model import BigramLanguageModel
+from language_modelling.model.bigram_language_model import BigramLanguageModel
 
 
 def q2_calculate_unique_unigrams_in_reuters_training():

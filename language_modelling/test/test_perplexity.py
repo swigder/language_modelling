@@ -1,6 +1,6 @@
 from language_modelling.corpus import Corpus, BrownCorpus
 from language_modelling.perplexity import PerplexityCalculator
-from language_modelling.ngram_language_model import UnigramLanguageModel, BigramLanguageModel
+from language_modelling.model.bigram_language_model import UnigramLanguageModel, BigramLanguageModel
 
 
 class TestPerplexityCalculator:
