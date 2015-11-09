@@ -4,6 +4,7 @@ from language_modelling.ngram_calculator import NgramCalculator
 from language_modelling.out_of_vocabulary_rate_calculator import OutOfVocabularyRateCalculator
 from language_modelling.perplexity import PerplexityCalculator
 from language_modelling.model.bigram_language_model import BigramLanguageModel
+from language_modelling.model.ngram_language_model import NgramLanguageModel
 
 
 def q2_calculate_unique_unigrams_in_reuters_training():
@@ -47,13 +48,26 @@ def q4_calculate_oov_rate_for_reuters_test_with_respect_to_training():
 def q5_calculate_perplexity_of_reuters_corpus():
     training = ReutersTrainingCorpus()
     test = ReutersTestCorpus()
+    language_model_bigram = BigramLanguageModel(training)
+    language_model_ngram = NgramLanguageModel(training, 2, backoff=False)
+    perplexity_calculator = PerplexityCalculator()
+    training_perplexity_bigram = perplexity_calculator.calculate_corpus_perplexity(language_model_bigram, training)
+    test_perplexity_bigram = perplexity_calculator.calculate_corpus_perplexity(language_model_bigram, test)
+    training_perplexity_ngram = perplexity_calculator.calculate_corpus_perplexity(language_model_ngram, training)
+    test_perplexity_ngram = perplexity_calculator.calculate_corpus_perplexity(language_model_ngram, test)
+
+    print("Training perplexity: ", training_perplexity_bigram, training_perplexity_ngram)
+    print("Test perplexity: ", test_perplexity_bigram, test_perplexity_ngram)
+
+
+def q6_minimize_perplexity_of_reuters_corpus():
+    training = ReutersTrainingCorpus()
+    test = ReutersTestCorpus()
     language_model = BigramLanguageModel(training)
     perplexity_calculator = PerplexityCalculator()
-    training_perplexity = perplexity_calculator.calculate_corpus_perplexity(language_model, training)
-    test_perplexity = perplexity_calculator.calculate_corpus_perplexity(language_model, test)
+    bigram_perplexity = perplexity_calculator.calculate_corpus_perplexity(language_model, test)
 
-    print("Training perplexity: ", training_perplexity)
-    print("Test perplexity: ", test_perplexity)
+    print("Bigram perplexity: ", bigram_perplexity)
 
 
 if __name__ == '__main__':
