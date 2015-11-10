@@ -49,15 +49,12 @@ def q5_calculate_perplexity_of_reuters_corpus():
     training = ReutersTrainingCorpus()
     test = ReutersTestCorpus()
     language_model_bigram = BigramLanguageModel(training)
-    language_model_ngram = NgramLanguageModel(training, 2, backoff=False)
     perplexity_calculator = PerplexityCalculator()
     training_perplexity_bigram = perplexity_calculator.calculate_corpus_perplexity(language_model_bigram, training)
     test_perplexity_bigram = perplexity_calculator.calculate_corpus_perplexity(language_model_bigram, test)
-    training_perplexity_ngram = perplexity_calculator.calculate_corpus_perplexity(language_model_ngram, training)
-    test_perplexity_ngram = perplexity_calculator.calculate_corpus_perplexity(language_model_ngram, test)
 
-    print("Training perplexity: ", training_perplexity_bigram, training_perplexity_ngram)
-    print("Test perplexity: ", test_perplexity_bigram, test_perplexity_ngram)
+    print("Training perplexity: ", training_perplexity_bigram)
+    print("Test perplexity: ", test_perplexity_bigram)
 
 
 def q6_minimize_perplexity_of_reuters_corpus():

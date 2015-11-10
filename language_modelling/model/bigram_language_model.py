@@ -23,7 +23,7 @@ class BigramLanguageModel(UnigramLanguageModel):
         :param bigram: bigram to find in the corpus
         :return: number of times the bigram is found in the corpus; 1 if it is not found TODO should be zero
         """
-        return self.bigrams[bigram] if bigram in self.bigrams else 1  # log(1) = 0 so adds 0 to sum
+        return self.bigrams[bigram] if bigram in self.bigrams else 0
 
     def get_bigram_probability(self, bigram):
         """

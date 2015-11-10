@@ -39,7 +39,7 @@ class NgramLanguageModel(UnigramLanguageModel):
         if tuple_ngram in ngrams:  # best case
             return ngrams[tuple_ngram], len(ngram)
 
-        return self.get_ngram_count(ngram[1:]) if self.backoff else 0, len(ngram)
+        return self.get_ngram_count(ngram[1:]) if self.backoff else (0, len(ngram))
 
     def get_ngram_probability(self, ngram):
         """
