@@ -2,6 +2,7 @@ from language_modelling.corpus import Corpus, BrownCorpus, ReutersTrainingCorpus
 from language_modelling.perplexity import PerplexityCalculator
 from language_modelling.model.bigram_language_model import UnigramLanguageModel, BigramLanguageModel
 from language_modelling.model.ngram_language_model import NgramLanguageModel
+from language_modelling.model.ngram_probability_calculator import NgramProbabilityCalculator, BackoffNgramProbabilityCalculator
 
 
 class TestLanguageModels:
@@ -12,7 +13,7 @@ class TestLanguageModels:
         corpus = Corpus([['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']])
         unigram_language_model = UnigramLanguageModel(corpus)
         bigram_language_model = BigramLanguageModel(corpus)
-        trigram_language_model = NgramLanguageModel(corpus, 3)
+        trigram_language_model = NgramLanguageModel(corpus, 3, NgramProbabilityCalculator)
 
         assert 10 == round(self.calculator.calculate_corpus_perplexity(unigram_language_model, corpus), 10)
         assert 1 == round(self.calculator.calculate_corpus_perplexity(bigram_language_model, corpus), 10)
@@ -23,8 +24,8 @@ class TestLanguageModels:
         test = Corpus([['a', 'b', 'c'], ['a', 'c', 'd']])
         unigram_language_model = UnigramLanguageModel(training)
         bigram_language_model = BigramLanguageModel(training)
-        trigram_language_model = NgramLanguageModel(training, 3, backoff=False)
-        trigram_language_model_backoff = NgramLanguageModel(training, 3)
+        trigram_language_model = NgramLanguageModel(training, 3, NgramProbabilityCalculator)
+        trigram_language_model_backoff = NgramLanguageModel(training, 3, BackoffNgramProbabilityCalculator)
 
         assert 4.95 == round(self.calculator.calculate_corpus_perplexity(unigram_language_model, test), 2)
         assert 1.68 == round(self.calculator.calculate_corpus_perplexity(bigram_language_model, test), 2)
@@ -35,8 +36,8 @@ class TestLanguageModels:
         corpus = BrownCorpus()
         unigram_language_model = UnigramLanguageModel(corpus)
         bigram_language_model = BigramLanguageModel(corpus)
-        trigram_language_model = NgramLanguageModel(corpus, 3)
-        quadrigram_language_model = NgramLanguageModel(corpus, 4)
+        trigram_language_model = NgramLanguageModel(corpus, 3, BackoffNgramProbabilityCalculator)
+        quadrigram_language_model = NgramLanguageModel(corpus, 4, BackoffNgramProbabilityCalculator)
 
         assert 1548.66 == round(self.calculator.calculate_corpus_perplexity(unigram_language_model, corpus), 2)
         assert 100.10 == round(self.calculator.calculate_corpus_perplexity(bigram_language_model, corpus), 2)
@@ -50,9 +51,9 @@ class TestLanguageModels:
         test_corpus = Corpus(reuters[slice_index:])
 
         unigram_language_model = UnigramLanguageModel(training_corpus)
-        bigram_language_model = NgramLanguageModel(training_corpus, 2)
-        trigram_language_model = NgramLanguageModel(training_corpus, 3)
-        quadrigram_language_model = NgramLanguageModel(training_corpus, 4)
+        bigram_language_model = NgramLanguageModel(training_corpus, 2, BackoffNgramProbabilityCalculator)
+        trigram_language_model = NgramLanguageModel(training_corpus, 3, BackoffNgramProbabilityCalculator)
+        quadrigram_language_model = NgramLanguageModel(training_corpus, 4, BackoffNgramProbabilityCalculator)
 
         assert 1021.63 == round(self.calculator.calculate_corpus_perplexity(unigram_language_model, test_corpus), 2)
         assert 145.54 == round(self.calculator.calculate_corpus_perplexity(bigram_language_model, test_corpus), 2)
