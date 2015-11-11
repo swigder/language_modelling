@@ -1,3 +1,4 @@
+from language_modelling.basic_ngram_calculator import BasicNgramCalculator
 from language_modelling.ngram_calculator import NgramCalculator
 from nltk import FreqDist
 
@@ -21,6 +22,7 @@ class Corpus:
 
 class TestNgramCalculator:
     corpus = Corpus()
+    basic_ngram_calculator = BasicNgramCalculator(corpus)
     ngram_calculator = NgramCalculator(corpus)
 
     flattened_sentences = [item for sublist in corpus.get_sentences() for item in sublist]

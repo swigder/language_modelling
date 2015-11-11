@@ -1,6 +1,6 @@
 from math import log
 
-from language_modelling.model.ngram_counter import NgramCounter
+from language_modelling.model.ngram_calculator_container import NgramCalculatorContainer
 
 
 class NgramLanguageModel:
@@ -15,7 +15,7 @@ class NgramLanguageModel:
         :param corpus: corpus over which to create the language model
         """
         self.n = n
-        self.ngram_counter = NgramCounter(corpus, n)
+        self.ngram_counter = NgramCalculatorContainer(corpus, n)
         self.ngram_probability_calculator = ngram_probability_calculator(self.ngram_counter)
 
     def get_ngram_probability(self, ngram):

@@ -45,3 +45,11 @@ class UnigramCalculator:
         number of tokens.
         """
         return len(self.get_unique_unigrams()) / len(self.unigrams)
+
+    def get_ngram_count(self, ngram):
+        unigram = ngram[0]
+        return self.unigrams[unigram] if unigram in self.unigrams else 0
+
+    def get_pregram_instances(self, pregram):
+        # TODO if pregram is not [], something is wrong
+        return self.unigrams

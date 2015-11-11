@@ -1,6 +1,6 @@
 from math import log
 
-from language_modelling.ngram_calculator import NgramCalculator
+from language_modelling.basic_ngram_calculator import BasicNgramCalculator
 from language_modelling.model.unigram_language_model import UnigramLanguageModel
 
 
@@ -14,7 +14,7 @@ class BigramLanguageModel(UnigramLanguageModel):
         :param corpus: corpus over which to create the language model
         """
         super(BigramLanguageModel, self).__init__(corpus)
-        self.ngram_calculator = NgramCalculator(corpus)
+        self.ngram_calculator = BasicNgramCalculator(corpus)
         self.bigrams = self.ngram_calculator.calculate_ngrams(2, True, False)
 
     def get_bigram_count(self, bigram):

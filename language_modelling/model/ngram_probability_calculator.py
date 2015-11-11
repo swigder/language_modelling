@@ -5,6 +5,8 @@ class NgramProbabilityCalculator:
     def __init__(self, ngram_counter):
         self.ngram_counter = ngram_counter
         self.corpus_unigram_length = ngram_counter.corpus_unigram_length
+        self.corpus_sentence_length = ngram_counter.corpus_unigram_length
+        self.corpus_vocabulary_size = len(ngram_counter.get_pregram_instances([]))
 
     def get_ngram_probability(self, ngram):
         ngram_count = self.ngram_counter.get_ngram_count(ngram)
@@ -17,6 +19,22 @@ class NgramProbabilityCalculator:
 
         pregram = ngram[:-1]
         pregram_count = self.ngram_counter.get_ngram_count(pregram)
+
+        return ngram_count / pregram_count
+
+
+class LaplaceSmoothingNgramProbabilityCalculator(NgramProbabilityCalculator):
+
+    def __init__(self, ngram_counter):
+        super(LaplaceSmoothingNgramProbabilityCalculator, self).__init__(ngram_counter)
+
+    def get_ngram_probability(self, ngram):
+        ngram_count = self.ngram_counter.get_ngram_count(ngram)
+        ngram_count += 1
+
+        pregram = ngram[:-1]
+        pregram_count = self.ngram_counter.get_ngram_count(pregram)
+        pregram_count += self.corpus_vocabulary_size
 
         return ngram_count / pregram_count
 
