@@ -33,17 +33,19 @@ class TestLanguageModels:
         assert 1.68 == round(self.calculator.calculate_corpus_perplexity(bigram_language_model, test), 2)
         assert 3.49 == round(self.calculator.calculate_corpus_perplexity(bigram_language_model_smoothing, test), 2)
         assert 1.73 == round(self.calculator.calculate_corpus_perplexity(trigram_language_model, test), 2)
-        assert 1.85 == round(self.calculator.calculate_corpus_perplexity(trigram_language_model_backoff, test), 2)
+        assert 2.93 == round(self.calculator.calculate_corpus_perplexity(trigram_language_model_backoff, test), 2)
 
     def test_language_models_on_brown_corpus(self):
         corpus = BrownCorpus()
         unigram_language_model = UnigramLanguageModel(corpus)
         bigram_language_model = BigramLanguageModel(corpus)
+        bigram_language_model_smoothing = NgramLanguageModel(corpus, 2, LaplaceSmoothingNgramProbabilityCalculator)
         trigram_language_model = NgramLanguageModel(corpus, 3, BackoffNgramProbabilityCalculator)
         quadrigram_language_model = NgramLanguageModel(corpus, 4, BackoffNgramProbabilityCalculator)
 
         assert 1548.66 == round(self.calculator.calculate_corpus_perplexity(unigram_language_model, corpus), 2)
         assert 100.10 == round(self.calculator.calculate_corpus_perplexity(bigram_language_model, corpus), 2)
+        assert 4659.28 == round(self.calculator.calculate_corpus_perplexity(bigram_language_model_smoothing, corpus), 2)
         assert 7.77 == round(self.calculator.calculate_corpus_perplexity(trigram_language_model, corpus), 2)
         assert 2.40 == round(self.calculator.calculate_corpus_perplexity(quadrigram_language_model, corpus), 2)
 
@@ -59,6 +61,6 @@ class TestLanguageModels:
         quadrigram_language_model = NgramLanguageModel(training_corpus, 4, BackoffNgramProbabilityCalculator)
 
         assert 1021.63 == round(self.calculator.calculate_corpus_perplexity(unigram_language_model, test_corpus), 2)
-        assert 145.54 == round(self.calculator.calculate_corpus_perplexity(bigram_language_model, test_corpus), 2)
-        assert 86.26 == round(self.calculator.calculate_corpus_perplexity(trigram_language_model, test_corpus), 2)
-        assert 75.61 == round(self.calculator.calculate_corpus_perplexity(quadrigram_language_model, test_corpus), 2)
+        assert 176.52 == round(self.calculator.calculate_corpus_perplexity(bigram_language_model, test_corpus), 2)
+        assert 171.96 == round(self.calculator.calculate_corpus_perplexity(trigram_language_model, test_corpus), 2)
+        assert 298.98 == round(self.calculator.calculate_corpus_perplexity(quadrigram_language_model, test_corpus), 2)

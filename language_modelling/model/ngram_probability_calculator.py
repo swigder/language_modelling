@@ -30,13 +30,11 @@ class LaplaceSmoothingNgramProbabilityCalculator(NgramProbabilityCalculator):
 
     def get_ngram_probability(self, ngram):
         ngram_count = self.ngram_counter.get_ngram_count(ngram)
-        ngram_count += 1
 
         pregram = ngram[:-1]
         pregram_count = self.ngram_counter.get_ngram_count(pregram)
-        pregram_count += self.corpus_vocabulary_size
 
-        return ngram_count / pregram_count
+        return (ngram_count + 1) / (pregram_count + self.corpus_vocabulary_size)
 
 
 class BackoffNgramProbabilityCalculator(NgramProbabilityCalculator):
@@ -48,7 +46,7 @@ class BackoffNgramProbabilityCalculator(NgramProbabilityCalculator):
         ngram_probability = super(BackoffNgramProbabilityCalculator, self).get_ngram_probability(ngram)
 
         if ngram_probability == 0 and len(ngram) > 1:
-            return self.get_ngram_probability(ngram[1:])
+            return 0.4 * self.get_ngram_probability(ngram[1:])
 
         return ngram_probability
 
