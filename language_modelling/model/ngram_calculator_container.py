@@ -4,6 +4,7 @@ from language_modelling.unigram_calculator import UnigramCalculator
 
 class NgramCalculatorContainer:
     def __init__(self, corpus, n):
+        self.n = n
         self.corpus_sentence_length = len(corpus.get_sentences())
 
         self.unigram_calculator = UnigramCalculator(corpus)

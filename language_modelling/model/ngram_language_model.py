@@ -10,13 +10,15 @@ class NgramLanguageModel:
 
     BASE = 2
 
-    def __init__(self, corpus, n, ngram_probability_calculator):
+    def __init__(self, corpus, n, calculator_class=None, ngram_counter=None, ngram_probability_calculator=None):
         """
         :param corpus: corpus over which to create the language model
         """
         self.n = n
-        self.ngram_counter = NgramCalculatorContainer(corpus, n)
-        self.ngram_probability_calculator = ngram_probability_calculator(self.ngram_counter)
+        self.ngram_counter = NgramCalculatorContainer(corpus, n) if ngram_counter is not None else ngram_counter
+        self.ngram_probability_calculator = calculator_class(self.ngram_counter) \
+            if calculator_class is not None \
+            else ngram_probability_calculator
 
     def get_ngram_probability(self, ngram):
         """

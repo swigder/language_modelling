@@ -26,7 +26,7 @@ class NgramProbabilityCalculator:
 class LaplaceSmoothingNgramProbabilityCalculator(NgramProbabilityCalculator):
 
     def __init__(self, ngram_counter):
-        super(LaplaceSmoothingNgramProbabilityCalculator, self).__init__(ngram_counter)
+        super().__init__(ngram_counter)
 
     def get_ngram_probability(self, ngram):
         ngram_count = self.ngram_counter.get_ngram_count(ngram)
@@ -37,13 +37,27 @@ class LaplaceSmoothingNgramProbabilityCalculator(NgramProbabilityCalculator):
         return (ngram_count + 1) / (pregram_count + self.corpus_vocabulary_size)
 
 
+class InterpolatingNgramProbabilityCalculator(NgramProbabilityCalculator):
+
+    def __init__(self, ngram_counter, lambdas=None):
+        super(InterpolatingNgramProbabilityCalculator, self).__init__(ngram_counter)
+        self.n = ngram_counter.n
+        self.lambdas = lambdas if lambdas is not None else [1/self.n] * self.n
+
+    def get_ngram_probability(self, ngram):
+        probability = 0
+        for i in range(self.n):
+            probability += self.lambdas[i] * super().get_ngram_probability(ngram[i:])
+        return probability
+
+
 class BackoffNgramProbabilityCalculator(NgramProbabilityCalculator):
 
     def __init__(self, ngram_counter):
-        super(BackoffNgramProbabilityCalculator, self).__init__(ngram_counter)
+        super().__init__(ngram_counter)
 
     def get_ngram_probability(self, ngram):
-        ngram_probability = super(BackoffNgramProbabilityCalculator, self).get_ngram_probability(ngram)
+        ngram_probability = super().get_ngram_probability(ngram)
 
         if ngram_probability == 0 and len(ngram) > 1:
             return 0.4 * self.get_ngram_probability(ngram[1:])
