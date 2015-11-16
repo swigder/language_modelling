@@ -3,6 +3,7 @@ from language_modelling.model.ngram_calculator_container import NgramCalculatorC
 from language_modelling.model.ngram_probability_calculator import InterpolatingNgramProbabilityCalculator
 from language_modelling.model.ngram_probability_calculator import NgramProbabilityCalculator
 from language_modelling.perplexity import PerplexityCalculator
+from language_modelling.corpus import Corpus
 import sys
 
 
@@ -28,9 +29,40 @@ class InterpolationTrainer:
             summation_total = 0
             for summation in summations:
                 summation_total += summation
+            converged = True
             for i, lambda_i in enumerate(lambda_guesses):
+                converged = round(summations[i] / summation_total, 4) == round(lambda_guesses[i], 4)
                 lambda_guesses[i] = summations[i] / summation_total
-            print(lambda_guesses)
+            if converged:
+                return lambda_guesses
+
+    def find_lambdas_max_estimation_multiple_slicings(self, corpus, n, slicings):
+        sentences = corpus.get_sentences()
+        slice_size = round(len(sentences) * (1/slicings))
+
+        guesses = []
+
+        for i in range(slicings):
+            slice_index = round(slice_size * i)
+            slice_end = slice_index + slice_size
+            training = Corpus(sentences[:slice_index] + sentences[slice_end:])
+            holdout = Corpus(sentences[slice_index:slice_end])
+            best_lambdas = InterpolationTrainer().find_lambdas_max_estimation(training, holdout, 3)
+            guesses.append(best_lambdas)
+
+        perplexities = [0] * slicings
+        for slicing in range(slicings):
+            slice_index = round(slice_size * i)
+            slice_end = slice_index + slice_size
+            training = Corpus(sentences[:slice_index] + sentences[slice_end:])
+            holdout = Corpus(sentences[slice_index:slice_end])
+            for guess in range(slicings):
+                calculator = InterpolatingNgramProbabilityCalculator(NgramCalculatorContainer(training, 3), guesses[i])
+                max_estimation_language_model = NgramLanguageModel(training, 3, ngram_probability_calculator=calculator)
+                perplexity = PerplexityCalculator().calculate_corpus_perplexity(max_estimation_language_model, holdout)
+                perplexities[guess] += perplexity
+
+        return guesses[perplexities.index(min(perplexities))]
 
     def find_lambdas_brute_force(self, training_corpus, holdout_corpus, n):
         ngram_counter = NgramCalculatorContainer(training_corpus, n)

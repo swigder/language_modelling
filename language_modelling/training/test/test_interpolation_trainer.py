@@ -9,15 +9,34 @@ from language_modelling.model.ngram_calculator_container import NgramCalculatorC
 class TestInterpolationTrainer:
     def test_trainer_on_reuters_corpus(self):
         reuters = ReutersTrainingCorpus().get_sentences()
-        slice_index = round(len(reuters) * .9)
-        training = Corpus(reuters[:slice_index])
-        holdout = Corpus(reuters[slice_index:])
+        slice_size = round(len(reuters) * .1)
 
-        best_lambdas, minimum_perplexity = InterpolationTrainer().find_lambdas_brute_force(training, holdout, 3)
-        max_estimation_guess = [0.25152437827417695, 0.469454648600852, 0.2790209731249711]
-        calculator = InterpolatingNgramProbabilityCalculator(NgramCalculatorContainer(training, 3), max_estimation_guess)
-        max_estimation_language_model = NgramLanguageModel(training, 3, ngram_probability_calculator=calculator)
-        max_estimation_perplexity = PerplexityCalculator().calculate_corpus_perplexity(max_estimation_language_model, holdout)
+        guesses = []
 
-        print(best_lambdas, minimum_perplexity)
-        print(max_estimation_guess, max_estimation_perplexity)
+        for i in range(10):
+            slice_index = round(slice_size * i)
+            slice_end = slice_index + slice_size
+            training = Corpus(reuters[:slice_index] + reuters[slice_end:])
+            holdout = Corpus(reuters[slice_index:slice_end])
+            best_lambdas = InterpolationTrainer().find_lambdas_max_estimation(training, holdout, 3)
+            guesses.append(best_lambdas)
+
+        perplexities = [0] * 10
+        for slicing in range(10):
+            slice_index = round(slice_size * i)
+            slice_end = slice_index + slice_size
+            training = Corpus(reuters[:slice_index] + reuters[slice_end:])
+            holdout = Corpus(reuters[slice_index:slice_end])
+            for guess in range(10):
+                calculator = InterpolatingNgramProbabilityCalculator(NgramCalculatorContainer(training, 3), guesses[guess])
+                max_estimation_language_model = NgramLanguageModel(training, 3, ngram_probability_calculator=calculator)
+                perplexity = PerplexityCalculator().calculate_corpus_perplexity(max_estimation_language_model, holdout)
+                perplexities[guess] += perplexity
+
+        min_perplexity = min(perplexities)
+        best_lambdas = guesses[perplexities.index(min_perplexity)]
+
+        for i in range(10):
+            print(perplexities[i] / 10, guesses[i])
+
+        print(min_perplexity, best_lambdas)
